@@ -1,0 +1,99 @@
+' file: COM.LIB
+' author: Michael Kopfensteiner
+'
+' This library contains common functions and subroutines to send and
+' receive data.
+'
+' Copyright (C) 2021  Michael Kopfensteiner
+'
+' This program is free software: you can redistribute it and/or modify
+' it under the terms of the GNU General Public License as published by
+' the Free Software Foundation, either version 3 of the License, or
+' (at your option) any later version.
+'
+' This program is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU General Public License for more details.
+'
+' You should have received a copy of the GNU General Public License
+' along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+
+'''''''
+'' Global variables:
+''''
+'   gControllerError$
+'   gCtrlStatus$
+'   gMX, gMY, gMZ
+'   gWX, gWY, gWZ
+
+SUB open_controller_serial
+    LET gControllerError$ = ""
+    OPEN "COM1:19200" AS #2
+END SUB
+
+SUB close_controller_serial
+    LET gControllerError$ = ""
+	CLOSE #2
+END SUB
+
+SUB update_position_info
+    LOCAL discarded$
+    PRINT #2, "?"
+    LINE INPUT #2, gCtrlStatus$, discarded$, gMX, gMY, gMZ, discarded$, gWX, gWY, gWZ
+END SUB
+
+FUNCTION send_raw$(codeline$, noNewline)
+	LOCAL controllerResult$
+    
+    IF noNewline THEN
+        PRINT #2, codeline$
+    ELSE
+        PRINT #2, codeline$;STRING$(1,10);
+    ENDIF
+    
+    LINE INPUT #2, controllerResult$
+    send_raw$ = controllerResult$
+END FUNCTION
+
+FUNCTION read_next_line$
+    IF EOF(#2) THEN
+        read_next_line$ = ""
+        EXIT FUNCTION
+    ENDIF
+    
+    LOCAL dataLine$
+    LINE INPUT #2, dataLine$
+
+    read_next_line$ = dataLine$
+END FUNCTION
+        
+
+FUNCTION send_with_status$(codeline$, noNewline)
+	LOCAL controllerStatus$
+	LOCAL discardedData$
+	
+    ' discard anything that is stored in the receive buffer
+	DO WHILE NOT EOF(#2)
+		LINE INPUT #2, discardedData$
+	LOOP
+    
+    send_with_status$ = send_raw$(codeline$, noNewline)
+END FUNCTION
+
+FUNCTION send_to_controller(codeline$, noNewline)
+	LOCAL controllerStatus$
+	
+    LET controllerStatus$ = send_line_with_status$(codeline$, noNewline)
+	IF controllerStatus$ = "ok" THEN
+        ' report success
+        LET gControllerError$ = ""
+		send_to_controller = 0
+	ELSE
+        ' report failure
+        LET gControllerError$ = controlerStatus$
+		send_to_controller = 1
+	ENDIF
+END FUNCTION
+

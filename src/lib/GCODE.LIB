@@ -1,0 +1,169 @@
+' file: GCODE.LIB
+' author: Carsten Meyer <cm@ct.de>
+'
+' Major parts of this file's content have been originally published
+' alongside the c't Hacks woodmill project.
+' I altered and slit up the original code was altered, to fit
+' my new library structure. The original repository contained no
+' license or named conditions for the code reuse.
+' You can find the original sources here:
+'   https://github.com/MakeMagazinDE/GRBL-JOG/
+
+FUNCTION send_gcode_file(filename$)
+    LOCAL ctrlError
+    LOCAL gcode$
+    
+    OPEN filename$ FOR INPUT AS #3
+    LET grblError = 0
+    DO
+        LINE INPUT #3, gcode$
+        ctrlError = send_to_controller(gcode$,0)
+    LOOP UNTIL EOF(#3) OR ctrlError
+    CLOSE #3
+    
+    send_gcode_file = ctrlError
+END SUB
+
+Sub run_gcode_window
+  Touch Remove All       'erase buttons
+  Touch Size 150,35      'set new bigger button size
+  Touch Create 9,0,220,"STOP",Red,B
+End Sub
+
+Sub display_gcode
+  x = 0 : y = 0 : z = 0
+  xold = 0 : yold = 0 : feed = 0
+  xmax = 0 : ymax = 0 : zmax = 0
+  gcode_line = 1
+  Open filename$ For input As #3
+  Do
+    Line Input #3, gcode$
+    posz=Instr(1,gcode$,"Z")
+    posx=Instr(1,gcode$,"X")
+    posy=Instr(1,gcode$,"Y")
+    If posx Then
+      myval$ = Mid$(gcode$,posx+1)
+      x = 1 + (Val(myval$) * scale)
+      If x > xmax Then
+        xmax = x
+      EndIf
+    EndIf
+    If posy Then
+      myval$ = Mid$(gcode$,posy+1)
+      y = 247 - (Val(myval$) * scale)
+      If y < ymax Then
+        ymax = y
+      EndIf
+    EndIf
+    If posz Then
+      myval$ = Mid$(gcode$,posz+1)
+      z = Val(myval$)
+      If z < zmax Then
+        zmax = z
+      EndIf      
+    EndIf
+    If posx Or posy Then
+      If z < 0 Then
+        Pixel(x, 20+(-10*z)) = green ' Z-Tiefe
+        Line (xold, yold)-(x, y), white
+        'Pixel(xold, yold)) = red
+        'Pixel(x, y)) = red
+      Else
+        Pixel(x,y) = red
+      EndIf
+    EndIf
+    xold = x
+    yold = y
+    Print @(3, 3) "Line: " gcode_line "   "
+    gcode_line = gcode_line + 1
+  Loop Until Eof(#2)
+  xmax = 247-xmas
+  ymax = ymax-1
+  Print @(3, 3) "Line: " gcode_line  "  X max: " xmax "  Y max: " ymax "  Z max: " zmax
+  close #2
+End Sub
+
+Sub open_gcode
+  LOCAL grblError
+  Cls Black
+  Touch Remove All      'erase buttons
+  Touch Size 75,20      'set new button size 
+  Touch Create 20,0,251,"100",white,R
+  Touch Create 21,80,251,"200",white,R
+  Touch Create 22,160,251,"400",white,R
+  Touch Create 23,240,251,"800",white,R
+  Font #2 
+  Print @(320, 253) "% Scale"
+  TouchVal(21)=1 ' scale 2 radio button
+  scale = 2
+  Font #1 
+  do
+    Line (1, 1)-(478, 247),Black,BF
+    Line (0, 0)-(479, 248),White,B
+    'Line (0, 15)-(479, 15),White
+    Line (1, 20)-(478, 20),white
+    For i = 47 to 247 step 20
+      Line (1, i)-(478, i),blue
+    Next i
+    For i = 1 to 471 step 20
+      Line (i, 21)-(i, 247),blue
+    Next i
+    Print @(364, 3) clr$(yellow, black) "Z: 1 mm/div"
+    Print @(364, 233) clr$(blue, black) "XY: " 20/scale "mm/div "
+    Line (1, 30)-(478, 30),yellow
+    Line (1, 40)-(478, 40),yellow
+    
+    end_loop = 0
+    display_gcode
+    Touch Size 100,35      'set new button size 
+    Touch Create 14,370,80,"Run",green,B
+    Touch Create 15,370,130,"Exit",Cyan,B
+    Touch Create 16,370,180,"Stop",red,B
+    Touch Disable 16
+    do
+      if Touched(20) then
+        end_loop = 1
+        scale = 1
+      endif
+      if Touched(21) then
+        end_loop = 1
+        scale = 2
+      endif
+      if Touched(22) then
+        end_loop = 1
+        scale = 4
+      endif
+      if Touched(23) then
+        end_loop = 1
+        scale = 8
+      endif
+      if TouchVal(14) then
+        Touch Disable All
+        Touch Enable 16
+        Open filename$ For input As #3
+        LET grblError = 0
+        Do
+          Line Input #3, gcode$
+          grblError = send_to_controller(gcode$,0)
+          gcode_line=gcode_line+1
+          If grblError Then
+            end_loop = 1
+            Touch Enable 16
+          EndIf
+        Loop Until Eof(#3) Or grblError Or TouchVal(16)
+        Touch Enable All
+        Touch Disable 16
+        Close #3
+        gcode$ = "g53 g0 z0.0"
+        grblError = send_to_controller(gcode$,0)
+        end_loop = 1
+      endif
+      if TouchVal(15) then
+        Cls Black
+        Touch Remove All      'erase buttons
+        exit sub
+      endif
+      pause 50
+    loop until end_loop
+  loop
+end sub
