@@ -49,12 +49,25 @@ DO
     LET nextChar$ = INKEY$
     
     IF nextChar$ <> "" THEN
-        IF nextChar$ = STRING$(1,10) THEN
+        ' soft-reset; this resets our linebuffer too
+        IF ASC(nexChar$) = 18 THEN
+            returnLine$ = send_raw$(nextChar$,0)
+            print_machine_lines
+            LET nextLine$ = ""
+
+        'realtime commands currently bypass the normal send routine too
+        ELSEIF nextChar$ = "?" OR nextChar$ = "~" OR nextChar$ = "!" THEN
+            returnLine$ = send_raw$(nextChar$,0)
+            print_machine_lines
+
+        ' send line on LF or CR
+        ELSEIF ASC(nextChar$) = 10 OR ASC(nextChar$) = 13 THEN
             ' the input line is complete
             returnLine$ = send_raw$(nextLine$,1)
             LET nextLine$ = ""
             print_machine_lines
             
+        ' in any other case, store the symbol in our linebuffer
         ELSE
             LET nextLine$ = nextLine$ + nextChar$
         ENDIF
