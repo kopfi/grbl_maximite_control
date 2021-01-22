@@ -43,6 +43,9 @@ LET nextLine$ = ""
 DO
     ON aborted GOTO APPEXIT
     
+    'print all machine lines, that arrived until now
+    print_machine_lines
+
     LET nextChar$ = INKEY$
     
     IF nextChar$ <> "" THEN
@@ -50,13 +53,8 @@ DO
             ' the input line is complete
             returnLine$ = send_raw$(nextLine$,1)
             LET nextLine$ = ""
+            print_machine_lines
             
-            DO WHILE returnLine$ <> ""
-                PRINT returnLine$;STRING$(1,10);
-                ON aborted GOTO APPEXIT
-                
-                returnLine$ = read_next_line$
-            LOOP
         ELSE
             LET nextLine$ = nextLine$ + nextChar$
         ENDIF
@@ -65,6 +63,15 @@ DO
         PAUSE 20
     ENDIF
 LOOP
+
+SUB print_machine_lines
+    DO WHILE returnLine$ <> ""
+        PRINT returnLine$;STRING$(1,10);
+        ON aborted GOTO APPEXIT
+
+        returnLine$ = read_next_line$
+    LOOP
+END SUB
 
 SUB handle_touch_input
 	IF TouchVal(11) THEN
