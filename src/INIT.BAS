@@ -20,7 +20,7 @@ TOUCH CREATE 11,80,192,"Nein",Yellow,B
 TOUCH CREATE 12,300,192,"JA",Red,B
 FONT #2
 
-' useable with:  ----------------------------------
+' useable width: ----------------------------------
 PRINT @(20,70)  "Das System wurde neu gestartet."
 PRINT @(20,88)  "Die Nullpunkt-Kalibrierung fehlt."
 PRINT @(20,106) "'Homing' jetzt starten?"
