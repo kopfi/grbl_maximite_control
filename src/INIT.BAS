@@ -50,8 +50,8 @@ IF TouchVal(12) THEN
         PAUSE(20000)
         RUN "B:\AUTORUN.BAS"
     ENDIF
-ENDIF
 
-close_controller_serial
+    close_controller_serial
+ENDIF
 
 RUN "B:\MENU.BAS"
