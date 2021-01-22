@@ -10,7 +10,7 @@
 # The directory that is used to prepare the final SDCard structure
 OUTDIR := sdcard
 # A list of subdirectories, that are created underneath the sdcard directory
-SUBDIRS := IMG LIB GCODE LOG APP
+SUBDIRS := IMG LIB GCODE LOG APP JOBS
 # The applications that shall be copied
 APPS := AUTORUN INIT MENU USB GFILE JOG
 # The libraries that shall be copied

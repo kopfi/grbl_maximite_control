@@ -29,7 +29,7 @@ LIBRARY LOAD "B:\LIB\GCODE.LIB"
 TOUCH REMOVE ALL
 COLOR WHITE, BLACK
 
-' TODO: goto gcode directory
+CHDIR("B:\JOBS")
 DO
     LET filename$ = file_select("*.tap",0)
 
@@ -41,6 +41,7 @@ DO
 LOOP
 
 APPEXIT:
+    CHDIR("B:\")
     TOUCH REMOVE ALL
 	CLS
     RUN "B:\MENU.BAS"
