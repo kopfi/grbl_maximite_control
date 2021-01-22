@@ -46,11 +46,10 @@ DO
     LET nextChar$ = INKEY$
     
     IF nextChar$ <> "" THEN
-        LET nextLine$ = nextLine$ + nextChar$
-        
         IF nextChar$ = STRING$(1,10) THEN
             ' the input line is complete
             returnLine$ = send_raw$(nextLine$,1)
+            LET nextLine$ = ""
             
             DO WHILE returnLine$ <> ""
                 PRINT returnLine$;STRING$(1,10);
@@ -58,6 +57,8 @@ DO
                 
                 returnLine$ = read_next_line$
             LOOP
+        ELSE
+            LET nextLine$ = nextLine$ + nextChar$
         ENDIF
     ELSE
         ' wait sleep a little and check INKEY$ again later
