@@ -114,15 +114,15 @@ SUB handle_touch_input
         LET executeLine = "G92 X0.0"
     ELSEIF TouchVal(14) THEN
         ' Set Y = 0
-        TouchVal(13) = 0
+        TouchVal(14) = 0
         LET executeLine = "G92 Y0.0"
     ELSEIF TouchVal(15) THEN
         ' Set Z = 0
-        TouchVal(13) = 0
+        TouchVal(15) = 0
         LET executeLine = "G92 Z0.0"
     ELSEIF TouchVal(16) THEN
         ' Goto Zero
-        TouchVal(13) = 0
+        TouchVal(16) = 0
         LET executeFile$ = "B:\APP\JOG\TO0.NC"
     ENDIF
 END SUB
