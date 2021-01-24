@@ -44,7 +44,8 @@ DO
     ON aborted GOTO APPEXIT
     
     'print all machine lines, that arrived until now
-    print_machine_lines
+    returnLine$ = read_raw$
+    PRINT returnLine$
 
     LET nextChar$ = INKEY$
     
