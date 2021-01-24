@@ -20,7 +20,7 @@
 ' along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 OPTION USB OFF
-OPTION VIDEO OFF
+OPTION VIDEO ON
 MODE 3
 LIBRARY LOAD "B:\LIB\COM.LIB"
 LIBRARY LOAD "B:\LIB\FSEL.LIB"
