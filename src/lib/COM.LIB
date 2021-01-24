@@ -44,6 +44,10 @@ SUB update_position_info
     LINE INPUT #2, gCtrlStatus$, discarded$, gMX, gMY, gMZ, discarded$, gWX, gWY, gWZ
 END SUB
 
+FUNCTION read_raw$
+    read_raw$ = INPUT$(80,#2)
+END FUNCTION
+
 FUNCTION send_raw$(codeline$, noNewline)
 	LOCAL controllerResult$
     
