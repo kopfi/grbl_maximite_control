@@ -31,7 +31,7 @@ COLOR WHITE, BLACK
 
 CHDIR("B:\JOBS")
 DO
-    LET filename$ = file_select("*.tap",0)
+    LET filename$ = file_select$("*.tap",0)
 
     ON filename$ = "Cancel" OR filename$ = "" GOTO APPEXIT
 
