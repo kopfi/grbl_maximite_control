@@ -53,6 +53,7 @@ DO
     ELSEIF TouchVal(14) THEN
         ' "Jogging" button clicked
         TouchVal(14) = 0
+        RUN "B:\JOG.BAS"
     ENDIF 
     PAUSE 50
 LOOP
