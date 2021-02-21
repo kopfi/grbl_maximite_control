@@ -45,7 +45,9 @@ DO
     
     'print all machine lines, that arrived until now
     returnLine$ = read_raw$
-    PRINT returnLine$
+    IF returnLine$ <> "" THEN
+        PRINT returnLine$
+    ENDIF
 
     LET nextChar$ = INKEY$
     
@@ -80,10 +82,10 @@ LOOP
 
 SUB print_machine_lines
     DO WHILE returnLine$ <> ""
-        PRINT returnLine$;STRING$(1,10);
+        PRINT returnLine$
         ON aborted GOTO APPEXIT
 
-        returnLine$ = read_next_line$
+        returnLine$ = read_raw$()
     LOOP
 END SUB
 
