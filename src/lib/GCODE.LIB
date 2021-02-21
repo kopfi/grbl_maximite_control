@@ -154,8 +154,6 @@ Sub open_gcode
         Touch Enable All
         Touch Disable 16
         Close #3
-        gcode$ = "g53 g0 z0.0"
-        grblError = send_to_controller(gcode$,0)
         end_loop = 1
       endif
       if TouchVal(15) then
