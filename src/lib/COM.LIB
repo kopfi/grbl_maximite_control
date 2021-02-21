@@ -30,7 +30,22 @@
 
 SUB open_controller_serial
     LET gControllerError$ = ""
+    LET gCtrlStatus$ = ""
+    LET gMX = 0
+    LET gMY = 0
+    LET gMZ = 0
+    LET gWX = 0
+    LET gWY = 0
+    LET gWZ = 0
     OPEN "COM1:19200" AS #2
+
+    PAUSE(1000)
+
+    ' discard already available upon open
+    LOCAL discarded$
+    DO WHILE NOT EOF(#2)
+        discarded$ = INPUT$(80, #2)
+    LOOP
 END SUB
 
 SUB close_controller_serial
