@@ -107,19 +107,19 @@ SUB handle_touch_input
 	IF TouchVal(12) THEN
         ' Homing
         TouchVal(12) = 0
-        LET executeLine = "$h"
+        LET executeLine$ = "$h"
     ELSEIF TouchVal(13) THEN
         ' Set X = 0
         TouchVal(13) = 0
-        LET executeLine = "G92 X0.0"
+        LET executeLine$ = "G92 X0.0"
     ELSEIF TouchVal(14) THEN
         ' Set Y = 0
         TouchVal(14) = 0
-        LET executeLine = "G92 Y0.0"
+        LET executeLine$ = "G92 Y0.0"
     ELSEIF TouchVal(15) THEN
         ' Set Z = 0
         TouchVal(15) = 0
-        LET executeLine = "G92 Z0.0"
+        LET executeLine$ = "G92 Z0.0"
     ELSEIF TouchVal(16) THEN
         ' Goto Zero
         TouchVal(16) = 0
