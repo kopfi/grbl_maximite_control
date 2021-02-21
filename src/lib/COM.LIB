@@ -41,7 +41,7 @@ END SUB
 SUB update_position_info
     LOCAL discarded$
     PRINT #2, "?"
-    LINE INPUT #2, gCtrlStatus$, discarded$, gMX, gMY, gMZ, discarded$, gWX, gWY, gWZ
+    INPUT #2, gCtrlStatus$, discarded$, gMX, gMY, gMZ, discarded$, gWX, gWY, gWZ
 END SUB
 
 FUNCTION read_raw$
