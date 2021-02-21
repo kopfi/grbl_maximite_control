@@ -22,7 +22,7 @@ FUNCTION send_gcode_file(filename$)
     CLOSE #3
     
     send_gcode_file = ctrlError
-END SUB
+END FUNCTION
 
 Sub run_gcode_window
   Touch Remove All       'erase buttons
