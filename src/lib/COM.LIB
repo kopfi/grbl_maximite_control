@@ -75,7 +75,6 @@ END FUNCTION
         
 
 FUNCTION send_with_status$(codeline$, noNewline)
-	LOCAL controllerStatus$
 	LOCAL discardedData$
 	
     ' discard anything that is stored in the receive buffer
@@ -89,14 +88,14 @@ END FUNCTION
 FUNCTION send_to_controller(codeline$, noNewline)
 	LOCAL controllerStatus$
 	
-    LET controllerStatus$ = send_line_with_status$(codeline$, noNewline)
+    LET controllerStatus$ = send_with_status$(codeline$, noNewline)
 	IF controllerStatus$ = "ok" THEN
         ' report success
         LET gControllerError$ = ""
 		send_to_controller = 0
 	ELSE
         ' report failure
-        LET gControllerError$ = controlerStatus$
+        LET gControllerError$ = controllerStatus$
 		send_to_controller = 1
 	ENDIF
 END FUNCTION
