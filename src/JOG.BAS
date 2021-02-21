@@ -20,7 +20,7 @@
 ' along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 OPTION USB OFF
-OPTION VIDEO OFF
+OPTION VIDEO ON
 MODE 3
 
 LIBRARY LOAD "B:\LIB\COM.LIB"
@@ -66,21 +66,21 @@ DO
     update_position_info
     FONT #1
     COLOR WHITE, BLACK
-    PRINT @(45, 126) "Status: ";gCtrlStatus;
-    IF gCtrlStatus <> "Jog" THEN
+    PRINT @(160, 126) "Status: ";gCtrlStatus$;
+    IF gCtrlStatus$ <> "Jog" THEN
         FONT #1
         COLOR CYAN, BLACK
-        PRINT @(45,10) "Maschinenpos.:"
-        PRINT @(45,22) "X:";FORMAT$(gMX, "%07.2f");"  Y:";FORMAT$(gMY, "%07.2f");"  Z:";FORMAT$(gMZ, "%07.2f")
+        PRINT @(160,10) "Maschinenpos.:"
+        PRINT @(160,22) "X:";FORMAT$(gMX, "%07.2f");"  Y:";FORMAT$(gMY, "%07.2f");"  Z:";FORMAT$(gMZ, "%07.2f")
         
         FONT #2
         COLOR BLUE, WHITE
         '               ------------------------------
-        PRINT @(45,44) "Arbeitspos.:           "
+        PRINT @(160,44) "Arbeitspos.:           "
         COLOR BLUE, BLACK
-        PRINT @(45,62) "X: ";FORMAT$(gWX, "%07.2f");" mm  "
-        PRINT @(45,80) "Y: ";FORMAT$(gWX, "%07.2f");" mm  "
-        PRINT @(45,98) "Z: ";FORMAT$(gWX, "%07.2f");" mm  "
+        PRINT @(160,65) "X: ";FORMAT$(gWX, "%07.2f");" mm  "
+        PRINT @(160,83) "Y: ";FORMAT$(gWY, "%07.2f");" mm  "
+        PRINT @(160,101) "Z: ";FORMAT$(gWZ, "%07.2f");" mm  "
         
         COLOR WHITE, BLACK
     ENDIF
