@@ -85,7 +85,7 @@ DO
         COLOR WHITE, BLACK
     ENDIF
     ' better alternative to discard input buffers?
-    LET dummy$ = INPUT$(200, #1)
+    LET dummy$ = INPUT$(200, #2)
     
     ' Remarks, usefull for other buttons:
     'G10 L2 ... set offset coordinate system directly
